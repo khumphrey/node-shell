@@ -2,7 +2,7 @@
 var fs = require('fs');
 var request = require('request');
 
-function doIt (doneFunc, input, file){
+function doIt (stdIn, doneFunc, input, file){
 	var obj = {
 	  	date: function(file){
 	  		doneFunc(Date());
@@ -38,8 +38,11 @@ function doIt (doneFunc, input, file){
 		  		});	
 	  		}	  		
 	  	},
-	  	head: function(file){
-	  		fs.readFile(file[0], 'utf8', function(error, data){
+	  	head: function(file, stdIn){
+	  		if(stdIn) {
+	  			
+	  		} else {
+	  			fs.readFile(file[0], 'utf8', function(error, data){
 	  			if (error) throw error;
 	  			var headArr = data.split("\n").slice(0,5);
 	  			var strOut ="";
@@ -47,7 +50,9 @@ function doIt (doneFunc, input, file){
 	  				strOut+= line + "\n";
 	  			});
 	  			doneFunc(strOut.trim());
-	  		});
+	  		});	
+	  		}
+	  		
 	  	},
 	  	tail: function(file){
 	  		fs.readFile(file[0], 'utf8', function(error, data){
