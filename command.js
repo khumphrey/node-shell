@@ -39,19 +39,23 @@ function doIt (stdIn, doneFunc, input, file){
 	  		}	  		
 	  	},
 	  	head: function(file, stdIn){
-	  		if(stdIn) {
-	  			
-	  		} else {
-	  			fs.readFile(file[0], 'utf8', function(error, data){
+  			fs.readFile(file[0], 'utf8', function(error, data){
 	  			if (error) throw error;
 	  			var headArr = data.split("\n").slice(0,5);
 	  			var strOut ="";
 	  			headArr.forEach(function(line){
 	  				strOut+= line + "\n";
 	  			});
-	  			doneFunc(strOut.trim());
-	  		});	
-	  		}
+	  			if(stdIn) {
+	  				fs.writefile('fileOUT.txt',strOut, function (err) {
+	  					if (err) throw err;
+	  					doIt(null, doneFunc, stdIN, 'fileOUT.txt');
+	  				})
+	  			} else {
+	  				doneFunc(strOut.trim());	
+	  			}
+	  			
+	  			});	
 	  		
 	  	},
 	  	tail: function(file){
