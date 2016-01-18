@@ -17,7 +17,7 @@ process.stdin.on('data', function(data) {
     var cmdString = data.toString().trim();
     var cmdList = cmdString.split(/\s*\|\s*/g);
     if (cmdList.length > 1) {
-        stdIN = 
+        stdIN = cmdList[1];
     }
 
     var cmdArr = cmdList[0].split(" ");

@@ -39,20 +39,19 @@ function doIt (stdIn, doneFunc, input, file){
 	  		}	  		
 	  	},
 	  	head: function(file, stdIn){
-	  		if(stdIn) {
-	  			
-	  		} else {
-	  			fs.readFile(file[0], 'utf8', function(error, data){
-	  			if (error) throw error;
-	  			var headArr = data.split("\n").slice(0,5);
-	  			var strOut ="";
-	  			headArr.forEach(function(line){
+  			fs.readFile(file[0], 'utf8', function(error, data){
+  			if (error) throw error;
+  			var headArr = data.split("\n").slice(0,5);
+  			var strOut ="";
+  			headArr.forEach(function(line){
 	  				strOut+= line + "\n";
 	  			});
-	  			doneFunc(strOut.trim());
+		  		if(stdIn) {
+		  			obj[stdIn](strOut.trim());
+		  		} else {
+	  				doneFunc(strOut.trim());
+	  			}
 	  		});	
-	  		}
-	  		
 	  	},
 	  	tail: function(file){
 	  		fs.readFile(file[0], 'utf8', function(error, data){
@@ -69,11 +68,7 @@ function doIt (stdIn, doneFunc, input, file){
 	  		fs.readFile(file[0], 'utf8', function(error, data){
 	  			if (error) throw error;
 	  			var headArr = data.split("\n");
-<<<<<<< HEAD
-	  			headArr = headArr.map(function(line){
-=======
 	  			headArr = headArr.map(function (line) {
->>>>>>> origin/master
 	  				return line.trim();
 	  			}).sort();
 	  			var strOut ="";
