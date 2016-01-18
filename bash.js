@@ -19,7 +19,6 @@ process.stdin.on('data', function(data) {
     if (cmdList.length > 1) {
         stdIN = cmdList[1];
     }
-
     var cmdArr = cmdList[0].split(" ");
     // process.stdout.write()
  doIt(stdIN, done, cmdArr[0], cmdArr.slice(1));

@@ -40,18 +40,22 @@ function doIt (stdIn, doneFunc, input, file){
 	  	},
 	  	head: function(file, stdIn){
   			fs.readFile(file[0], 'utf8', function(error, data){
-  			if (error) throw error;
-  			var headArr = data.split("\n").slice(0,5);
-  			var strOut ="";
-  			headArr.forEach(function(line){
+	  			if (error) throw error;
+	  			var headArr = data.split("\n").slice(0,5);
+	  			var strOut ="";
+	  			headArr.forEach(function(line){
 	  				strOut+= line + "\n";
 	  			});
-		  		if(stdIn) {
-		  			obj[stdIn](strOut.trim());
-		  		} else {
-	  				doneFunc(strOut.trim());
+	  			if(stdIn) {
+	  				fs.writefile('fileOUT.txt',strOut, function (err) {
+	  					if (err) throw err;
+	  					doIt(null, doneFunc, stdIN, 'fileOUT.txt');
+	  				});
+	  			} else {
+	  				doneFunc(strOut.trim());	
 	  			}
-	  		});	
+	  			
+	  			});	
 	  	},
 	  	tail: function(file){
 	  		fs.readFile(file[0], 'utf8', function(error, data){
