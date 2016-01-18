@@ -1,47 +1,40 @@
 
 var fs = require('fs');
+var request = require('request');
 
-function doIt (input, file){
+function doIt (doneFunc, input, file){
 	var obj = {
 	  	date: function(file){
-	  		// return Date();
-	  		process.stdout.write(Date() + "\n");
-	  		process.stdout.write("prompt > ");
+	  		doneFunc(Date());
 	  	},
 	  	pwd: function(file) {
-	  		//return process.cwd();
-	  		process.stdout.write(process.cwd() + "\n");
-	  		process.stdout.write("prompt > ");
+	  		doneFunc(process.cwd());
 	  	},
 	  	ls: function(){
-			// var str = '';
-			// fs.readdir('.', function(err, files) {
-			//   if (err) throw err;
-			// 	files.forEach(function(file) {
-			// 	    str+= file.toString() + "\n";
-			// 	});
-			// 	return str;
-			// });
+			var strOut = '';
 			fs.readdir('.', function(err, files) {
 			  	if (err) throw err;
 			  	files.forEach(function(file) {
-			    	process.stdout.write(file.toString() + "\n");
+			    	strOut += file.toString() + "\n";
 			  	});
-			  	process.stdout.write("prompt > ");
+			  	doneFunc(strOut.trim());
 			});
-
 	  	},
 	  	echo: function(file){
-	  		process.stdout.write(file[0] + "\n");
-	  		process.stdout.write("prompt > ");
+	  		doneFunc(file[0]);
 	  	},
 	  	cat: function(file){
 	  		//array of argument files
+	  		var counter = 0;
+	  		var strOut = '';
 	  		for(var i = 0; i < file.length; i++){
 		  		fs.readFile(file[i], 'utf8', function(error, data){
 		  			if (error) throw error;
-		  			process.stdout.write(data + "\n");
-		  			process.stdout.write("prompt > ");
+		  			strOut+= data + "\n";
+		  			counter+=1;
+		  			if (counter===file.length) {
+		  				doneFunc(strOut.trim());
+		  			}
 		  		});	
 	  		}	  		
 	  	},
@@ -49,26 +42,52 @@ function doIt (input, file){
 	  		fs.readFile(file[0], 'utf8', function(error, data){
 	  			if (error) throw error;
 	  			var headArr = data.split("\n").slice(0,5);
+	  			var strOut ="";
 	  			headArr.forEach(function(line){
-	  				process.stdout.write(line + "\n");
+	  				strOut+= line + "\n";
 	  			});
-	  			process.stdout.write("prompt > ");
+	  			doneFunc(strOut.trim());
 	  		});
 	  	},
 	  	tail: function(file){
 	  		fs.readFile(file[0], 'utf8', function(error, data){
 	  			if (error) throw error;
 	  			var tailArr = data.split("\n").slice(-10);
+	  			var strOut ="";
 	  			tailArr.forEach(function(line){
-	  				process.stdout.write(line + "\n");
+	  				strOut+= line + "\n";
 	  			});
-	  			process.stdout.write("prompt > ");
+	  			doneFunc(strOut.trim());
+	  		});
+	  	},
+	  	sort: function(file){
+	  		fs.readFile(file[0], 'utf8', function(error, data){
+	  			if (error) throw error;
+	  			var headArr = data.split("\n");
+	  			headArr.sort();
+	  			var strOut ="";
+	  			headArr.forEach(function(line){
+	  				strOut+= line + "\n";
+	  			});
+	  			doneFunc(strOut.trim());
+	  		});
+	  	},
+	  	wc: function(file){
+	  		fs.readFile(file[0], 'utf8', function(error, data){
+	  			if (error) throw error;
+	  			var headArr = data.split("\n");
+	  			doneFunc(headArr.length);
+	  		});
+	  	},
+	  	curl: function(file){
+	  		request(file[0], function(error, response, body){
+	  			if(response.statusCode === 200) {
+	  				doneFunc(body);
+	  			}
 	  		});
 	  	}
 	};
 	obj[input](file);
-	//process.stdout.write( obj[input]());
- //  	process.stdout.write('\nprompt > ');
 }
 
 
