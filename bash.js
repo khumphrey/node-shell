@@ -2,7 +2,7 @@
 // console.log(Object.keys(process));
 var doIt = require('./command.js');
 
-process.stdout.write('prompt > ');
+process.stdout.write("prompt > ");
 var done = function(output){
 	//show output
 	process.stdout.write(output + "\n");
