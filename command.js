@@ -64,7 +64,9 @@ function doIt (doneFunc, input, file){
 	  		fs.readFile(file[0], 'utf8', function(error, data){
 	  			if (error) throw error;
 	  			var headArr = data.split("\n");
-	  			headArr.sort();
+	  			headArr = headArr.map(function (line) {
+	  				return line.trim();
+	  			}).sort();
 	  			var strOut ="";
 	  			headArr.forEach(function(line){
 	  				strOut+= line + "\n";
@@ -72,6 +74,24 @@ function doIt (doneFunc, input, file){
 	  			doneFunc(strOut.trim());
 	  		});
 	  	},
+
+	  	uniq: function(file){
+	  		fs.readFile(file[0], 'utf8', function(error, data){
+	  			if (error) throw error;
+	  			var headArr = data.split("\n");
+	  			headArr = headArr.map(function (line) {
+	  				return line.trim();
+	  			}).sort();
+	  			var strOut =headArr[0];
+	  			for (var i = 1; i < headArr.length; i++) {
+	  				if(headArr[i] !== headArr[i-1]) {
+	  					strOut += ("\n" + headArr[i]);
+	  				}
+	  			}
+	  			doneFunc(strOut);
+	  		});
+	  	},
+
 	  	wc: function(file){
 	  		fs.readFile(file[0], 'utf8', function(error, data){
 	  			if (error) throw error;
