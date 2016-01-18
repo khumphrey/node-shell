@@ -64,7 +64,9 @@ function doIt (doneFunc, input, file){
 	  		fs.readFile(file[0], 'utf8', function(error, data){
 	  			if (error) throw error;
 	  			var headArr = data.split("\n");
-	  			headArr.sort();
+	  			headArr = headArr.map(function(line){
+	  				return line.trim();
+	  			}).sort();
 	  			var strOut ="";
 	  			headArr.forEach(function(line){
 	  				strOut+= line + "\n";
