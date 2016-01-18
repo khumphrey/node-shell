@@ -2,6 +2,9 @@
 // console.log(Object.keys(process));
 var doIt = require('./command.js');
 
+
+var stdIN = null;
+
 process.stdout.write("prompt > ");
 var done = function(output){
 	//show output
@@ -11,10 +14,15 @@ var done = function(output){
 };
 // The stdin 'data' event fires after a user types in a line
 process.stdin.on('data', function(data) {
-  var cmd = data.toString().trim(); // remove the newline
-  var cmdArr = cmd.split(" ");
-  // process.stdout.write()
- doIt(done, cmdArr[0], cmdArr.slice(1));
+    var cmdString = data.toString().trim();
+    var cmdList = cmdString.split(/\s*\|\s*/g);
+    if (cmdList.length > 1) {
+        stdIN = 
+    }
+
+    var cmdArr = cmdList[0].split(" ");
+    // process.stdout.write()
+ doIt(stdIN, done, cmdArr[0], cmdArr.slice(1));
 
 
 });
